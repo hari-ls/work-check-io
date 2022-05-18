@@ -29,6 +29,7 @@ const scheduleSchema = new Schema(
     checkInAllowedOn: [
       {
         type: String,
+        enum: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
       },
     ],
   },

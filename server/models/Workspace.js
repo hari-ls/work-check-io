@@ -12,6 +12,7 @@ const workspaceSchema = new Schema(
     slug: {
       type: String,
       required: true,
+      unique: true,
     },
     limit: {
       type: Number,

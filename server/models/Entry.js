@@ -14,6 +14,7 @@ const entrySchema = new Schema({
   },
   checkIn: {
     type: Date,
+    required: true,
   },
   checkOut: {
     type: Date,
@@ -31,7 +32,7 @@ const entrySchema = new Schema({
   },
   mood: {
     type: String,
-    enum: ["happy", "sad", "frown"],
+    enum: ["HAPPY", "SAD", "FROWN"],
   },
 });
 // define collection name
