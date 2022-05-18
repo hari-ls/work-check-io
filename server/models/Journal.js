@@ -3,28 +3,31 @@ const mongoose = require("mongoose");
 // schema constructor
 const { Schema } = mongoose;
 // build schema
-const journalSchema = new Schema({
-  workspace: {
-    type: Schema.Types.ObjectId,
-    ref: "Workspace",
-  },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  entries: [
-    {
+const journalSchema = new Schema(
+  {
+    workspace: {
       type: Schema.Types.ObjectId,
-      ref: "Entry",
+      ref: "Workspace",
     },
-  ],
-  from: {
-    type: Date,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    entries: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Entry",
+      },
+    ],
+    from: {
+      type: Date,
+    },
+    to: {
+      type: Date,
+    },
   },
-  to: {
-    type: Date,
-  },
-});
+  { timestamps: true, versionKey: false }
+);
 // define collection name
 const collectionName = "journals";
 // create model

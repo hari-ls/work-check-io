@@ -26,12 +26,12 @@ const workspaceSchema = new Schema(
     },
     users: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        userId: { type: Schema.Types.ObjectId, ref: "User" },
+        jobTitle: { type: String, maxlength: 160 },
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 // define collection name
 const collectionName = "workspaces";

@@ -32,7 +32,7 @@ const scheduleSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 // define collection name
 const collectionName = "schedules";
