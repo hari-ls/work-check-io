@@ -4,7 +4,17 @@ const { signToken } = require("../utils/auth");
 const { AuthenticationError } = require("apollo-server-express");
 // create resolvers
 const resolvers = {
-  Query: {},
+  Query: {
+    user: async (parent, { _id }, context) => {
+      // check if logged in
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        return user;
+      }
+      // if not logged in
+      throw new AuthenticationError("Not logged in");
+    },
+  },
   Mutation: {
     login: async (parent, { username, password }) => {
       const user = await User.findOne({ username });

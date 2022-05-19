@@ -24,6 +24,7 @@ const auth = {
     } catch (err) {
       return console.log("Invalid token!");
     }
+    return req;
   },
   signToken: function ({ _id, username, firstName, lastName, email }) {
     const payload = { _id, username, firstName, lastName, email }; // initialise payload object
