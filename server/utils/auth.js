@@ -31,3 +31,4 @@ const auth = {
   },
 };
 // export middlware
+module.exports = auth;

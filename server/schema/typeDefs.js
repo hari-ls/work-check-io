@@ -40,19 +40,19 @@ const typeDefs = gql`
     _id: ID
     workspace: Workspace
     user: User
-    checkIn: Date
+    checkIn: String
     plan: String
     summary: String
     productivity: Int
     mood: String
-    checkOut: Date
+    checkOut: String
   }
   type Journal {
     _id: ID
     workspace: Workspace
     user: User
-    from: Date
-    to: Date
+    from: String
+    to: String
     entries: [Entry]
   }
   # define queries
