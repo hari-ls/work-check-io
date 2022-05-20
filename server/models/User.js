@@ -33,8 +33,29 @@ const userSchema = new Schema(
       minLength: 8,
     },
   },
-  { timestamps: true, versionKey: false }
+  {
+    timestamps: true,
+    versionKey: false,
+  }
 );
+// defining virtuals
+userSchema.set("toObject", { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
+// for full name (get & set)
+userSchema
+  .virtual("fullName")
+  .get(function () {
+    return this.firstName + " " + this.lastName;
+  })
+  .set(function (newName) {
+    var nameParts = newName.split(" ");
+    this.firstName = nameParts[0];
+    this.lastName = nameParts[1];
+  });
+// for initials (get)
+userSchema.virtual("initials").get(function () {
+  return this.firstName[0] + this.lastName[0];
+});
 // setup middleware for encrypting password
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {

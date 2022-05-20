@@ -8,9 +8,9 @@ const entrySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Workspace",
   },
-  user: {
+  member: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Workspace.members",
   },
   checkIn: {
     type: Date,

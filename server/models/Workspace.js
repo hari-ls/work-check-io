@@ -25,7 +25,7 @@ const workspaceSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    users: [
+    members: [
       {
         userId: { type: Schema.Types.ObjectId, ref: "User" },
         jobTitle: { type: String, maxlength: 160 },

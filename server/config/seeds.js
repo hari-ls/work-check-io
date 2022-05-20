@@ -114,7 +114,7 @@ db.once("open", async () => {
       slug: "acme",
       limit: 3,
       owner: users[0]._id,
-      users: [
+      members: [
         {
           userId: users[0]._id,
           jobTitle: "Director",
@@ -134,7 +134,7 @@ db.once("open", async () => {
       slug: "j-firm",
       limit: 1,
       owner: users[3]._id,
-      users: [
+      members: [
         {
           userId: users[3]._id,
           jobTitle: "Owner",
@@ -146,7 +146,7 @@ db.once("open", async () => {
       slug: "ls-tech",
       limit: 9,
       owner: users[12]._id,
-      users: [
+      members: [
         {
           userId: users[12]._id,
           jobTitle: "CEO",
@@ -189,6 +189,7 @@ db.once("open", async () => {
   const workspaces = await Workspace.insertMany([...workspacesSeedData]);
   console.log("✓ Workspaces");
   // initlialise schedules
+  console.log(workspaces[0].members[0]._id);
   await Schedule.deleteMany(); // remove existing
   let schedulesSeedData = [
     {
@@ -198,10 +199,10 @@ db.once("open", async () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       weeklyHours: 38,
       checkInAllowedOn: ["MON", "TUE", "WED", "THU", "FRI"],
-      users: [
-        workspaces[0].users[0]._id,
-        workspaces[0].users[1]._id,
-        workspaces[0].users[2]._id,
+      members: [
+        workspaces[0].members[0]._id,
+        workspaces[0].members[1]._id,
+        workspaces[0].members[2]._id,
       ],
     },
     {
@@ -211,7 +212,7 @@ db.once("open", async () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       weeklyHours: 45,
       checkInAllowedOn: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
-      users: [workspaces[1].users[0]._id],
+      members: [workspaces[1].members[0]._id],
     },
     {
       workspace: workspaces[2]._id,
@@ -220,12 +221,12 @@ db.once("open", async () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       weeklyHours: 38,
       checkInAllowedOn: ["MON", "TUE", "WED", "THU", "FRI"],
-      users: [
-        workspaces[2].users[0]._id,
-        workspaces[2].users[1]._id,
-        workspaces[2].users[2]._id,
-        workspaces[2].users[3]._id,
-        workspaces[2].users[4]._id,
+      members: [
+        workspaces[2].members[0]._id,
+        workspaces[2].members[1]._id,
+        workspaces[2].members[2]._id,
+        workspaces[2].members[3]._id,
+        workspaces[2].members[4]._id,
       ],
     },
     {
@@ -235,7 +236,7 @@ db.once("open", async () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       weeklyHours: 24,
       checkInAllowedOn: ["TUE", "THU", "FRI"],
-      users: [workspaces[2].users[8]._id, workspaces[2].users[5]._id],
+      members: [workspaces[2].members[8]._id, workspaces[2].members[5]._id],
     },
     {
       workspace: workspaces[2]._id,
@@ -244,7 +245,7 @@ db.once("open", async () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       weeklyHours: 24,
       checkInAllowedOn: ["MON", "WED", "SAT"],
-      users: [workspaces[2].users[6]._id, workspaces[2].users[7]._id],
+      members: [workspaces[2].members[6]._id, workspaces[2].members[7]._id],
     },
   ];
   const schedules = await Schedule.insertMany([...schedulesSeedData]);
@@ -328,7 +329,7 @@ db.once("open", async () => {
     timeSet1.forEach((set) => {
       let dataObj = {
         workspace: workspaces[2]._id,
-        user: workspaces[2].users[0]._id,
+        member: workspaces[2].members[0]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -343,7 +344,7 @@ db.once("open", async () => {
     timeSet2.forEach((set) => {
       let dataObj = {
         workspace: workspaces[2]._id,
-        user: workspaces[2].users[5]._id,
+        member: workspaces[2].members[5]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -358,7 +359,7 @@ db.once("open", async () => {
     timeSet3.forEach((set) => {
       let dataObj = {
         workspace: workspaces[2]._id,
-        user: workspaces[2].users[7]._id,
+        member: workspaces[2].members[7]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -373,7 +374,7 @@ db.once("open", async () => {
     timeSet1.forEach((set) => {
       let dataObj = {
         workspace: workspaces[1]._id,
-        user: workspaces[1].users[0]._id,
+        member: workspaces[1].members[0]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -388,7 +389,7 @@ db.once("open", async () => {
     timeSet1.forEach((set) => {
       let dataObj = {
         workspace: workspaces[0]._id,
-        user: workspaces[0].users[0]._id,
+        member: workspaces[0].members[0]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -403,7 +404,7 @@ db.once("open", async () => {
     timeSet1.forEach((set) => {
       let dataObj = {
         workspace: workspaces[0]._id,
-        user: workspaces[0].users[1]._id,
+        member: workspaces[0].members[1]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -430,7 +431,7 @@ db.once("open", async () => {
   const journalEntries1 = await Entry.find(
     {
       workspace: workspaces[0]._id,
-      user: workspaces[0].users[0]._id,
+      member: workspaces[0].members[0]._id,
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
@@ -439,7 +440,7 @@ db.once("open", async () => {
   const journalEntries2 = await Entry.find(
     {
       workspace: workspaces[1]._id,
-      user: workspaces[1].users[0]._id,
+      member: workspaces[1].members[0]._id,
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
@@ -448,7 +449,7 @@ db.once("open", async () => {
   const journalEntries3 = await Entry.find(
     {
       workspace: workspaces[2]._id,
-      user: workspaces[2].users[0]._id,
+      member: workspaces[2].members[0]._id,
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
@@ -457,7 +458,7 @@ db.once("open", async () => {
   const journalEntries4 = await Entry.find(
     {
       workspace: workspaces[2]._id,
-      user: workspaces[2].users[5]._id,
+      member: workspaces[2].members[5]._id,
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
@@ -466,28 +467,28 @@ db.once("open", async () => {
   let journalsSeedData = [
     {
       workspace: workspaces[0]._id,
-      user: workspaces[0].users[0]._id,
+      member: workspaces[0].members[0]._id,
       entries: journalEntries1.map((entry) => entry._id),
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
     {
       workspace: workspaces[1]._id,
-      user: workspaces[1].users[0]._id,
+      member: workspaces[1].members[0]._id,
       entries: journalEntries2.map((entry) => entry._id),
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
     {
       workspace: workspaces[2]._id,
-      user: workspaces[2].users[0]._id,
+      member: workspaces[2].members[0]._id,
       entries: journalEntries3.map((entry) => entry._id),
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
     },
     {
       workspace: workspaces[2]._id,
-      user: workspaces[2].users[5]._id,
+      member: workspaces[2].members[5]._id,
       entries: journalEntries4.map((entry) => entry._id),
       from: new Date(2022, 4, 15),
       to: new Date(2022, 5, 15),
