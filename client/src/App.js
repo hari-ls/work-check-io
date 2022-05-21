@@ -51,7 +51,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/workspace/create" element={<CreateWorkspace />} />
+            {/* <Route path="/workspace/create" element={<CreateWorkspace />} />
             <Route path="/workspace/select" element={<SelectWorkspace />} />
             <Route path="/workspace/:slug" element={<Workspace />} />
             <Route path="/workspace/update" element={<UpdateWorkspace />} />
@@ -62,7 +62,7 @@ function App() {
             <Route path="/journals" element={<AllJournals />} />
             <Route path="/journal/complie" element={<ComplileJournal />} />
             <Route path="journal/:id" element={<Journal />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile />} /> */}
             <Route path="*" element={<Error />} />
           </Routes>
         </div>
