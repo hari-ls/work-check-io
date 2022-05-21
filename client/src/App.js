@@ -1,5 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import Error from "./pages/Error";
 import Login from "./pages/User/Login";
 import Register from "./pages/User/Register";
@@ -16,9 +22,23 @@ import ListEntries from "./pages/Entry/List";
 import Journal from "./pages/Journal";
 import ComplileJournal from "./pages/Journal/Complie";
 import AllJournals from "./pages/Journal/All";
-
-const client = new ApolloClient({
+// create http link
+const httpLink = new createHttpLink({
   uri: process.env.REACT_APP_API_SERVER,
+});
+// set auth token if present
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem("auth_token");
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+// create apollo client using auth and http link
+const client = new ApolloClient({
+  uri: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
