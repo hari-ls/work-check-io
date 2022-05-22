@@ -31,6 +31,32 @@ const resolvers = {
       const token = await signToken(user);
       return { token, user };
     },
+    register: async (
+      parent,
+      { firstName, lastName, email, username, password, confirmPassword }
+    ) => {
+      const passCheck = password === confirmPassword;
+      const usernameCheck = await User.findOne({ username });
+
+      if (passCheck && !usernameCheck) {
+        const user = await User.create({
+          username,
+          firstName,
+          lastName,
+          email,
+          password,
+        });
+
+        const token = await signToken(user);
+        return { token, user };
+      }
+    },
+    // checkIn: async () => {},
+    // updateEntry: async () => {},
+    // deleteEntry: async () => {},
+    // checkOut: async () => {},
+    // compile: async () => {},
+    // deleteJournal: async () => {},
   },
 };
 // export resolvers

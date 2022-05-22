@@ -1,11 +1,21 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import AuthService from "../../utils/AuthService";
-import { LOGIN } from "../../utils/mutations";
+import { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { AuthContext } from "../../context/authContext";
+import { useForm } from "../../utils/hooks";
+import { REGISTER } from "../../utils/mutations";
 
 function Register(props) {
-  // set local state for fields
-  const [formState, setFormState] = useState({
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
+
+  function registerUserCB() {
+    console.log("Callback hit");
+    registerUser();
+  }
+
+  const { onChange, onSubmit, values } = useForm(registerUserCB, {
     firstName: "",
     lastName: "",
     email: "",
@@ -13,20 +23,30 @@ function Register(props) {
     password: "",
     confirmPassword: "",
   });
-  // handle submission event
-  const handleSubmission = async (event) => {
-    event.preventDefault();
-    try {
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // mutation
+  const [registerUser, { loading }] = useMutation(REGISTER, {
+    update(proxy, { data: { register: userData } }) {
+      context.login(userData);
+      navigate("/");
+    },
+    onError({ graphQLErrors }) {
+      setErrors(graphQLErrors);
+    },
+    variables: {
+      firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
+      email: values.email.trim(),
+      username: values.username.trim(),
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    },
+  });
 
   useEffect(() => {
-    const isLoggedInState = AuthService.loggedIn();
-    console.log(formState);
-    console.log(isLoggedInState);
-  }, [formState]);
+    if (context.user) {
+      navigate("/");
+    }
+  }, [context.user, navigate]);
 
   return (
     <div>
@@ -44,7 +64,7 @@ function Register(props) {
       </div>
       <div className="flex flex-col p-6 bg-base-200 max-w-md space-y-4 rounded-lg shadow-lg mx-auto">
         <div className="flex flex-col">
-          <form className="space-y-2" onSubmit={handleSubmission}>
+          <form className="space-y-2" onSubmit={onSubmit}>
             <div className="flex justify-between">
               <div className="">
                 <label htmlFor="firstName" className="label">
@@ -55,12 +75,7 @@ function Register(props) {
                   name="firstName"
                   placeholder="John"
                   className="input input-bordered w-full"
-                  onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      firstName: e.target.value.trim(),
-                    })
-                  }
+                  onChange={onChange}
                   autoFocus
                 />
               </div>
@@ -73,12 +88,7 @@ function Register(props) {
                   name="lastName"
                   placeholder="Doe"
                   className="input input-bordered w-full"
-                  onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      lastName: e.target.value.trim(),
-                    })
-                  }
+                  onChange={onChange}
                 />
               </div>
             </div>
@@ -91,9 +101,7 @@ function Register(props) {
                 name="email"
                 placeholder="you@example.com"
                 className="input input-bordered w-full"
-                onChange={(e) =>
-                  setFormState({ ...formState, email: e.target.value.trim() })
-                }
+                onChange={onChange}
               />
             </div>
             <div className="">
@@ -105,12 +113,7 @@ function Register(props) {
                 name="username"
                 placeholder="username"
                 className="input input-bordered w-full"
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    username: e.target.value.trim(),
-                  })
-                }
+                onChange={onChange}
               />
             </div>
             <div className="">
@@ -122,9 +125,7 @@ function Register(props) {
                 name="password"
                 placeholder="*******"
                 className="input input-bordered w-full"
-                onChange={(e) =>
-                  setFormState({ ...formState, password: e.target.value })
-                }
+                onChange={onChange}
               />
             </div>
             <div className="">
@@ -136,12 +137,7 @@ function Register(props) {
                 name="confirmPassword"
                 placeholder="*******"
                 className="input input-bordered w-full"
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    confirmPassword: e.target.value,
-                  })
-                }
+                onChange={onChange}
               />
             </div>
             <div>
@@ -160,20 +156,23 @@ function Register(props) {
           Sign in
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            stroke-width="2"
+            strokeWidth="2"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M17 8l4 4m0 0l-4 4m4-4H3"
             />
           </svg>
         </Link>
       </div>
+      {errors.map(function (error) {
+        return <div>{error.message}</div>;
+      })}
     </div>
   );
 }

@@ -1,28 +1,44 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import AuthService from "../../utils/AuthService";
+import { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { AuthContext } from "../../context/authContext";
+import { useForm } from "../../utils/hooks";
 import { LOGIN } from "../../utils/mutations";
 
 function Login(props) {
-  // set local state for fields
-  const [formState, setFormState] = useState({
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
+
+  function loginUserCB() {
+    console.log("Callback hit");
+    loginUser();
+  }
+
+  const { onChange, onSubmit, values } = useForm(loginUserCB, {
     username: "",
     password: "",
   });
-  // handle submission event
-  const handleSubmission = async (event) => {
-    event.preventDefault();
-    try {
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
+  const [loginUser, { loading }] = useMutation(LOGIN, {
+    update(proxy, { data: { login: userData } }) {
+      context.login(userData);
+      navigate("/");
+    },
+    onError({ graphQLErrors }) {
+      setErrors(graphQLErrors);
+    },
+    variables: {
+      username: values.username,
+      password: values.password,
+    },
+  });
 
   useEffect(() => {
-    const isLoggedInState = AuthService.loggedIn();
-    console.log(formState);
-    console.log(isLoggedInState);
-  }, [formState]);
+    if (context.user) {
+      navigate("/");
+    }
+  }, [context.user, navigate]);
 
   return (
     <div>
@@ -40,7 +56,7 @@ function Login(props) {
       </div>
       <div className="flex flex-col p-6 bg-base-200 max-w-md space-y-4 rounded-lg shadow-lg mx-auto">
         <div className="flex flex-col">
-          <form className="space-y-2" onSubmit={handleSubmission}>
+          <form className="space-y-2" onSubmit={onSubmit}>
             <div className="">
               <label htmlFor="username" className="label">
                 Username
@@ -50,12 +66,7 @@ function Login(props) {
                 name="username"
                 placeholder="username"
                 className="input input-bordered w-full"
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    username: e.target.value.trim(),
-                  })
-                }
+                onChange={onChange}
                 autoFocus
               />
             </div>
@@ -68,9 +79,7 @@ function Login(props) {
                 name="password"
                 placeholder="*******"
                 className="input input-bordered w-full"
-                onChange={(e) =>
-                  setFormState({ ...formState, password: e.target.value })
-                }
+                onChange={onChange}
               />
             </div>
             <div>
@@ -89,20 +98,23 @@ function Login(props) {
           Create account
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            stroke-width="2"
+            strokeWidth="2"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M17 8l4 4m0 0l-4 4m4-4H3"
             />
           </svg>
         </Link>
       </div>
+      {errors.map((error) => {
+        return <li>{error.message}</li>;
+      })}
     </div>
   );
 }

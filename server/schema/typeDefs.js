@@ -69,6 +69,14 @@ const typeDefs = gql`
   # define mutations
   type Mutation {
     login(username: String!, password: String!): Auth
+    register(
+      firstName: String
+      lastName: String!
+      email: String!
+      username: String!
+      password: String!
+      confirmPassword: String!
+    ): Auth
   }
 `;
 // export type definitions

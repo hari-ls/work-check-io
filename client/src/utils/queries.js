@@ -1,18 +1,18 @@
-import { gql } from "@apollo/client";
+// import { gql } from "@apollo/client";
 
-// LIST WORKSPACES
-export const USER_WORKSPACES = gql`
-    query Workspaces() {
-        workspaces {
-            name
-            slug
-            owner {
-                _id
-                username
-            }
-        }
-    }
-`;
+// // LIST WORKSPACES
+// export const USER_WORKSPACES = gql`
+//     query Workspaces() {
+//         workspaces {
+//             name
+//             slug
+//             owner {
+//                 _id
+//                 username
+//             }
+//         }
+//     }
+// `;
 
 // WORKSPACE DETAILS
 
