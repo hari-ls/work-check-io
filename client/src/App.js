@@ -1,5 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Store, { Context } from "./utils/Store";
+import { Routes, Route } from "react-router-dom";
 import Error from "./pages/Error";
 import Login from "./pages/User/Login";
 import Register from "./pages/User/Register";
@@ -14,7 +13,6 @@ import AllJournals from "./pages/Journal/All";
 function App() {
   return (
     <div>
-      {/* <Store> */}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -27,7 +25,6 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Error />} />
       </Routes>
-      {/* </Store> */}
     </div>
   );
 }

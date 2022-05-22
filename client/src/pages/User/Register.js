@@ -10,6 +10,10 @@ function Register(props) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
+  const toggleBtnLoading = () => {
+    document.getElementById("loginBtn").classList.toggle("loading");
+  };
+
   function registerUserCB() {
     console.log("Callback hit");
     registerUser();
@@ -27,9 +31,11 @@ function Register(props) {
   const [registerUser, { loading }] = useMutation(REGISTER, {
     update(proxy, { data: { register: userData } }) {
       context.login(userData);
+      toggleBtnLoading();
       navigate("/");
     },
     onError({ graphQLErrors }) {
+      toggleBtnLoading();
       setErrors(graphQLErrors);
     },
     variables: {
@@ -41,6 +47,10 @@ function Register(props) {
       confirmPassword: values.confirmPassword,
     },
   });
+
+  if (loading) {
+    toggleBtnLoading();
+  }
 
   useEffect(() => {
     if (context.user) {

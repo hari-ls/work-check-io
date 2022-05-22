@@ -10,6 +10,10 @@ function Login(props) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
+  const toggleBtnLoading = () => {
+    document.getElementById("loginBtn").classList.toggle("loading");
+  };
+
   function loginUserCB() {
     console.log("Callback hit");
     loginUser();
@@ -33,6 +37,10 @@ function Login(props) {
       password: values.password,
     },
   });
+
+  if (loading) {
+    toggleBtnLoading();
+  }
 
   useEffect(() => {
     if (context.user) {
@@ -83,7 +91,11 @@ function Login(props) {
               />
             </div>
             <div>
-              <button type="submit" className="btn btn-block mt-4">
+              <button
+                id="loginBtn"
+                type="submit"
+                className="btn btn-block mt-4"
+              >
                 Login
               </button>
             </div>
