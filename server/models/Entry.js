@@ -1,16 +1,13 @@
 // import mongoose
 const mongoose = require("mongoose");
+const moment = require("moment");
 // schema constructor
 const { Schema } = mongoose;
 // build schema
 const entrySchema = new Schema({
-  workspace: {
+  user: {
     type: Schema.Types.ObjectId,
-    ref: "Workspace",
-  },
-  member: {
-    type: Schema.Types.ObjectId,
-    ref: "Workspace.members",
+    ref: "User",
   },
   checkIn: {
     type: Date,
@@ -34,6 +31,15 @@ const entrySchema = new Schema({
     type: String,
     enum: ["HAPPY", "SAD", "FROWN"],
   },
+});
+// defining virtuals
+entrySchema.set("toObject", { virtuals: true });
+entrySchema.set("toJSON", { virtuals: true });
+// get total duration
+entrySchema.virtual("duration").get(function () {
+  // check if checkOut is not null
+  // -- calculate total duration between checkIn & checkOut
+  return "8";
 });
 // define collection name
 const collectionName = "entries";

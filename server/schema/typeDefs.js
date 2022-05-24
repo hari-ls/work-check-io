@@ -14,27 +14,6 @@ const typeDefs = gql`
     token: ID
     user: User
   }
-  type Workspace {
-    _id: ID
-    name: String
-    slug: String
-    limit: Int
-    owner: User
-    users: [Member]
-  }
-  type Member {
-    _id: ID
-    user: User
-    jobTitle: String
-  }
-  type Schedule {
-    _id: ID
-    workspace: Workspace
-    name: String
-    description: String
-    weeklyHours: Float
-    users: [User] # can be member
-  }
   type Entry {
     _id: ID
     workspace: Workspace

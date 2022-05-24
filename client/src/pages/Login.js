@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { AuthContext } from "../../context/authContext";
-import { useForm } from "../../utils/hooks";
-import { LOGIN } from "../../utils/mutations";
+import { AuthContext } from "../context/authContext";
+import { useForm } from "../utils/hooks";
+import { LOGIN } from "../utils/mutations";
 
 function Login(props) {
   const context = useContext(AuthContext);

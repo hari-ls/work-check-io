@@ -1,7 +1,7 @@
 // import connection
 const db = require("./connection");
 // import models
-const { User, Workspace, Schedule, Entry, Journal } = require("../models");
+const { User, Entry } = require("../models");
 // perform action on event: once open
 db.once("open", async () => {
   // acknowledge start
@@ -106,150 +106,6 @@ db.once("open", async () => {
   });
   const users = await User.find({}).exec();
   console.log("✓ Users");
-  // initialise workspaces
-  await Workspace.deleteMany(); // remove existing
-  let workspacesSeedData = [
-    {
-      name: "Acme, Inc",
-      slug: "acme",
-      limit: 3,
-      owner: users[0]._id,
-      members: [
-        {
-          userId: users[0]._id,
-          jobTitle: "Director",
-        },
-        {
-          userId: users[1]._id,
-          jobTitle: "Sales Exec",
-        },
-        {
-          userId: users[2]._id,
-          jobTitle: "Accountant",
-        },
-      ],
-    },
-    {
-      name: "J Firm",
-      slug: "j-firm",
-      limit: 1,
-      owner: users[3]._id,
-      members: [
-        {
-          userId: users[3]._id,
-          jobTitle: "Owner",
-        },
-      ],
-    },
-    {
-      name: "LS Tech",
-      slug: "ls-tech",
-      limit: 9,
-      owner: users[12]._id,
-      members: [
-        {
-          userId: users[12]._id,
-          jobTitle: "CEO",
-        },
-        {
-          userId: users[4]._id,
-          jobTitle: "CFO",
-        },
-        {
-          userId: users[5]._id,
-          jobTitle: "CTO",
-        },
-        {
-          userId: users[6]._id,
-          jobTitle: "COO",
-        },
-        {
-          userId: users[7]._id,
-          jobTitle: "CMO",
-        },
-        {
-          userId: users[8]._id,
-          jobTitle: "BDM",
-        },
-        {
-          userId: users[9]._id,
-          jobTitle: "Team Lead",
-        },
-        {
-          userId: users[10]._id,
-          jobTitle: "Graphics Designer",
-        },
-        {
-          userId: users[11]._id,
-          jobTitle: "Full Stack Developer",
-        },
-      ],
-    },
-  ];
-  const workspaces = await Workspace.insertMany([...workspacesSeedData]);
-  console.log("✓ Workspaces");
-  // initlialise schedules
-  console.log(workspaces[0].members[0]._id);
-  await Schedule.deleteMany(); // remove existing
-  let schedulesSeedData = [
-    {
-      workspace: workspaces[0]._id,
-      name: "Workdays",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      weeklyHours: 38,
-      checkInAllowedOn: ["MON", "TUE", "WED", "THU", "FRI"],
-      members: [
-        workspaces[0].members[0]._id,
-        workspaces[0].members[1]._id,
-        workspaces[0].members[2]._id,
-      ],
-    },
-    {
-      workspace: workspaces[1]._id,
-      name: "Weekly",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      weeklyHours: 45,
-      checkInAllowedOn: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
-      members: [workspaces[1].members[0]._id],
-    },
-    {
-      workspace: workspaces[2]._id,
-      name: "Weekdays",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      weeklyHours: 38,
-      checkInAllowedOn: ["MON", "TUE", "WED", "THU", "FRI"],
-      members: [
-        workspaces[2].members[0]._id,
-        workspaces[2].members[1]._id,
-        workspaces[2].members[2]._id,
-        workspaces[2].members[3]._id,
-        workspaces[2].members[4]._id,
-      ],
-    },
-    {
-      workspace: workspaces[2]._id,
-      name: "Alternate I",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      weeklyHours: 24,
-      checkInAllowedOn: ["TUE", "THU", "FRI"],
-      members: [workspaces[2].members[8]._id, workspaces[2].members[5]._id],
-    },
-    {
-      workspace: workspaces[2]._id,
-      name: "Alternate II",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      weeklyHours: 24,
-      checkInAllowedOn: ["MON", "WED", "SAT"],
-      members: [workspaces[2].members[6]._id, workspaces[2].members[7]._id],
-    },
-  ];
-  const schedules = await Schedule.insertMany([...schedulesSeedData]);
-  console.log("✓ Schedules");
   // initiliase entries
   await Entry.deleteMany(); // remove existing
   const entryData = {
@@ -328,8 +184,7 @@ db.once("open", async () => {
   function addEntries1() {
     timeSet1.forEach((set) => {
       let dataObj = {
-        workspace: workspaces[2]._id,
-        member: workspaces[2].members[0]._id,
+        user: users[12]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -343,8 +198,7 @@ db.once("open", async () => {
   function addEntries2() {
     timeSet2.forEach((set) => {
       let dataObj = {
-        workspace: workspaces[2]._id,
-        member: workspaces[2].members[5]._id,
+        user: users[5]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -358,8 +212,7 @@ db.once("open", async () => {
   function addEntries3() {
     timeSet3.forEach((set) => {
       let dataObj = {
-        workspace: workspaces[2]._id,
-        member: workspaces[2].members[7]._id,
+        user: users[7]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -373,8 +226,7 @@ db.once("open", async () => {
   function addEntries4() {
     timeSet1.forEach((set) => {
       let dataObj = {
-        workspace: workspaces[1]._id,
-        member: workspaces[1].members[0]._id,
+        user: users[0]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -388,8 +240,7 @@ db.once("open", async () => {
   function addEntries5() {
     timeSet1.forEach((set) => {
       let dataObj = {
-        workspace: workspaces[0]._id,
-        member: workspaces[0].members[0]._id,
+        user: users[3]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -403,8 +254,7 @@ db.once("open", async () => {
   function addEntries6() {
     timeSet1.forEach((set) => {
       let dataObj = {
-        workspace: workspaces[0]._id,
-        member: workspaces[0].members[1]._id,
+        user: users[1]._id,
         checkIn: entryData.time(...set).checkIn,
         plan: entryData.plan,
         summary: entryData.summary,
@@ -426,76 +276,6 @@ db.once("open", async () => {
   addAllEntries(); // execute
   const entries = await Entry.insertMany([...entriesSeedData]);
   console.log("✓ Entries");
-  // initialise journals
-  await Journal.deleteMany(); // remove existing
-  const journalEntries1 = await Entry.find(
-    {
-      workspace: workspaces[0]._id,
-      member: workspaces[0].members[0]._id,
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    "_id"
-  ); // find relevant entry ids
-  const journalEntries2 = await Entry.find(
-    {
-      workspace: workspaces[1]._id,
-      member: workspaces[1].members[0]._id,
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    "_id"
-  ); // find relevant entry ids
-  const journalEntries3 = await Entry.find(
-    {
-      workspace: workspaces[2]._id,
-      member: workspaces[2].members[0]._id,
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    "_id"
-  ); // find relevant entry ids
-  const journalEntries4 = await Entry.find(
-    {
-      workspace: workspaces[2]._id,
-      member: workspaces[2].members[5]._id,
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    "_id"
-  ); // find relevant entry ids
-  let journalsSeedData = [
-    {
-      workspace: workspaces[0]._id,
-      member: workspaces[0].members[0]._id,
-      entries: journalEntries1.map((entry) => entry._id),
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    {
-      workspace: workspaces[1]._id,
-      member: workspaces[1].members[0]._id,
-      entries: journalEntries2.map((entry) => entry._id),
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    {
-      workspace: workspaces[2]._id,
-      member: workspaces[2].members[0]._id,
-      entries: journalEntries3.map((entry) => entry._id),
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-    {
-      workspace: workspaces[2]._id,
-      member: workspaces[2].members[5]._id,
-      entries: journalEntries4.map((entry) => entry._id),
-      from: new Date(2022, 4, 15),
-      to: new Date(2022, 5, 15),
-    },
-  ];
-  const journals = await Journal.insertMany([...journalsSeedData]);
-  console.log("✓ Journals");
   // acknowledge end
   console.log("...completed!");
   // exit from console
