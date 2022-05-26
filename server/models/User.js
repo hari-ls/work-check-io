@@ -68,9 +68,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-// define collection name
-const collectionName = "users";
 // create model
-const User = mongoose.model("User", userSchema, collectionName);
+const User = mongoose.model("User", userSchema, "users");
 // export model
 module.exports = User;

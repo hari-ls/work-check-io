@@ -12,12 +12,13 @@ if (AuthService.loggedIn()) {
 const AuthContext = createContext({
   user: null,
   login: (userData) => {},
-  logouut: () => {},
+  logout: () => {},
 });
 // create reducer
 function authReducer(state, action) {
   switch (action.type) {
     case "LOGIN":
+      console.log(action.payload);
       return {
         ...state,
         user: action.payload,
@@ -38,6 +39,7 @@ function AuthProvider(props) {
   // shortcut fns to call actions
   const login = (userData) => {
     AuthService.login(userData.token);
+    console.log(userData.user.existing);
     dispatch({
       type: "LOGIN",
       payload: userData,

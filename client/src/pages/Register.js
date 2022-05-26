@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../utils/hooks";
 import { REGISTER } from "../utils/mutations";
@@ -10,9 +10,34 @@ function Register(props) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
-  const toggleBtnLoading = () => {
-    document.getElementById("loginBtn").classList.toggle("loading");
-  };
+  // const REGISTER = gql`
+  //   mutation Register(
+  //     $lastName: String!
+  //     $email: String!
+  //     $username: String!
+  //     $password: String!
+  //     $confirmPassword: String!
+  //     $firstName: String
+  //   ) {
+  //     register(
+  //       lastName: $lastName
+  //       email: $email
+  //       username: $username
+  //       password: $password
+  //       confirmPassword: $confirmPassword
+  //       firstName: $firstName
+  //     ) {
+  //       token
+  //       user {
+  //         _id
+  //         email
+  //         firstName
+  //         lastName
+  //         username
+  //       }
+  //     }
+  //   }
+  // `;
 
   function registerUserCB() {
     console.log("Callback hit");
@@ -31,11 +56,9 @@ function Register(props) {
   const [registerUser, { loading }] = useMutation(REGISTER, {
     update(proxy, { data: { register: userData } }) {
       context.login(userData);
-      toggleBtnLoading();
       navigate("/");
     },
     onError({ graphQLErrors }) {
-      toggleBtnLoading();
       setErrors(graphQLErrors);
     },
     variables: {
@@ -47,10 +70,6 @@ function Register(props) {
       confirmPassword: values.confirmPassword,
     },
   });
-
-  if (loading) {
-    toggleBtnLoading();
-  }
 
   useEffect(() => {
     if (context.user) {
@@ -151,7 +170,11 @@ function Register(props) {
               />
             </div>
             <div>
-              <button type="submit" className="btn btn-block mt-4">
+              <button
+                id="registerBtn"
+                type="submit"
+                className="btn btn-block mt-4"
+              >
                 Register
               </button>
             </div>

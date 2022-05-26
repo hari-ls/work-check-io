@@ -17,14 +17,14 @@ function Header(props) {
           <div>
             <div className="avatar placeholder cursor-pointer dropdown dropdown-end">
               <div
-                tabindex="0"
+                tabIndex="0"
                 className="bg-neutral-focus text-neutral-content rounded-full w-12"
               >
                 <span>{user.data.firstName[0] + user.data.lastName[0]}</span>
               </div>
               <ul
-                tabindex="0"
-                class="menu dropdown-content p-2 shadow bg-base-200 rounded-box w-52 mt-6"
+                tabIndex="0"
+                className="menu dropdown-content p-2 shadow bg-base-200 rounded-box w-52 mt-6"
               >
                 <li>
                   <Link to="/profile">My Profile</Link>

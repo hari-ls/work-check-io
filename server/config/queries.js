@@ -1,5 +1,7 @@
 const db = require("./connection");
 const { User, Workspace, Schedule, Entry, Journal } = require("../models");
+const moment = require("moment");
+const { duration } = require("moment");
 
 db.once("open", async () => {
   // const workspace = await Workspace.findOne({
@@ -16,8 +18,47 @@ db.once("open", async () => {
   //     select: "username initials fullName email",
   //   });
 
-  const user = await User.findOne({ username: "Shah" });
+  const user = await User.findOne({ lastName: "Shah" });
   console.log(user ? "found" : "not found");
+
+  const start = [2022, 3, 15];
+  const end = [2022, 3, 28];
+
+  const from = new Date(...start);
+  const to = new Date(...end);
+  console.log(from, to);
+
+  const entries = await Entry.find({
+    user: user._id,
+    checkIn: { $gte: "2022-04-14T14:30:00.000Z" },
+    checkOut: { $lte: "2022-04-27T14:30:00.000Z" },
+  });
+  // console.log(entries);
+
+  const outTime = moment(entries[0].checkOut);
+  const inTime = moment(entries[0].checkIn);
+  const difference = outTime.diff(inTime, "hours", true).toFixed(2);
+  // console.log(parseFloat(difference));
+  const now = new Date();
+  console.log(now);
+
+  const allDurations = () => entries.map((entry) => parseFloat(entry.duration));
+  const sumDurations = allDurations().reduce(
+    (prev, curr) => parseFloat(prev) + parseFloat(curr),
+    0
+  );
+  // console.log(allDurations, sumDurations);
+  const _id = "628f3c1aaf07ce742eb98dde";
+  const singleEntry = await Entry.findById(_id);
+  // console.log(singleEntry);
+
+  const existing = await Entry.findOne({
+    user: user._id,
+    checkOut: null,
+  });
+  console.log(existing);
+
+  process.exit();
 });
 
 // const token = "afasdfasdfsafasdf";

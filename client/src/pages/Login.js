@@ -1,14 +1,27 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../utils/hooks";
-import { LOGIN } from "../utils/mutations";
 
 function Login(props) {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
+
+  const LOGIN = gql`
+    mutation Login($username: String!, $password: String!) {
+      login(username: $username, password: $password) {
+        token
+        user {
+          _id
+          username
+          firstName
+          lastName
+        }
+      }
+    }
+  `;
 
   const toggleBtnLoading = () => {
     document.getElementById("loginBtn").classList.toggle("loading");
