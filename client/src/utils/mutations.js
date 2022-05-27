@@ -10,7 +10,6 @@ export const LOGIN = gql`
         username
         firstName
         lastName
-        existing
       }
     }
   }
@@ -47,7 +46,16 @@ export const REGISTER = gql`
 `;
 
 // CHECKIN
-// export const CHECKIN = gql``;
+export const CHECKIN = gql`
+  mutation Checkin($start: String!) {
+    entry: checkIn(start: $start) {
+      _id
+      checkIn
+      plan
+      summary
+    }
+  }
+`;
 
 // UPDATE_ENTRY
 // export const UPDATE_ENTRY = gql``;

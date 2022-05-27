@@ -26,12 +26,12 @@ db.once("open", async () => {
 
   const from = new Date(...start);
   const to = new Date(...end);
-  console.log(from, to);
+  console.log(typeof from, typeof to);
 
   const entries = await Entry.find({
     user: user._id,
-    checkIn: { $gte: "2022-04-14T14:30:00.000Z" },
-    checkOut: { $lte: "2022-04-27T14:30:00.000Z" },
+    checkIn: { $gte: from },
+    checkOut: { $lte: to },
   });
   // console.log(entries);
 
@@ -40,7 +40,7 @@ db.once("open", async () => {
   const difference = outTime.diff(inTime, "hours", true).toFixed(2);
   // console.log(parseFloat(difference));
   const now = new Date();
-  console.log(now);
+  console.log(now, "jkjkjkj");
 
   const allDurations = () => entries.map((entry) => parseFloat(entry.duration));
   const sumDurations = allDurations().reduce(

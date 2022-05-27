@@ -1,4 +1,40 @@
+import { useContext } from "react";
+import { EntryContext } from "../context/entryContext";
+import { useMutation, gql } from "@apollo/client";
+import { CHECKIN } from "../utils/mutations";
+import moment from "moment";
+import Loading from "../components/Loading";
+
 function StartEntry(props) {
+  const { checkIn } = useContext(EntryContext);
+
+  // const CHECKIN = gql`
+  //   mutation Checkin($start: String!) {
+  //     entry: checkIn(start: $start) {
+  //       _id
+  //       checkIn
+  //       plan
+  //       summary
+  //     }
+  //   }
+  // `;
+
+  const timeStamp = moment().format();
+  console.log(typeof timeStamp);
+  const [startEntry, { loading }] = useMutation(CHECKIN, {
+    update(_, { data: { entry: entryData } }) {
+      checkIn(entryData);
+    },
+    // onError({ graphQLErrors }) {
+    //   setErrors(graphQLErrors);
+    // },
+    variables: {
+      start: timeStamp,
+    },
+  });
+
+  if (loading) return <Loading />;
+
   return (
     <div className="p-12">
       <div className="text-center">
@@ -21,7 +57,13 @@ function StartEntry(props) {
           Get started by checking in.
         </p>
         <div className="mt-6">
-          <button type="button" className="btn btn-primary">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              startEntry();
+            }}
+          >
             Check in
             <svg
               xmlns="http://www.w3.org/2000/svg"

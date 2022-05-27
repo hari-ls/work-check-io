@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import { EntryContext, EntryProvider } from "../context/entryContext";
 import { useQuery } from "@apollo/client";
 import { OPEN_ENTRY } from "../utils/queries";
 import StartEntry from "../components/StartEntry";
@@ -8,10 +9,16 @@ import EditEntry from "../components/EditEntry";
 
 function Home(props) {
   const { user } = useContext(AuthContext);
+  const { checkedIn, entry, checkIn, checkOut } = useContext(EntryContext);
 
   const { loading, data } = useQuery(OPEN_ENTRY, {
     onCompleted(data) {
-      console.log(data.entry);
+      console.log(data.entry, checkedIn, entry);
+      if (data.entry) {
+        console.log("checked in");
+        checkIn(data.entry);
+        console.log(checkedIn, entry);
+      }
     },
     skip: !user,
   });
@@ -33,16 +40,25 @@ function Home(props) {
                     My Journal
                   </button>
                 </Link>
-                {/* <button type="button" className="btn btn-primary">
-                  Check out
-                </button> */}
+                {checkedIn ? (
+                  <button type="button" className="btn btn-primary">
+                    Check out
+                  </button>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
 
-            {data.entry ? (
-              <EditEntry id={data.entry._id} checkIn={data.entry.checkIn} />
+            {checkedIn ? (
+              <EditEntry
+                id={entry._id}
+                checkIn={entry.checkIn}
+                plan={entry.plan}
+                summary={entry.summary}
+              />
             ) : (
-              <StartEntry />
+              <StartEntry checkIn={checkIn} />
             )}
           </div>
         ) : (

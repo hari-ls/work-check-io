@@ -7,17 +7,20 @@ import client from "./utils/apolloClient";
 import { ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./context/authContext";
+import { EntryProvider } from "./context/entryContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthProvider>
-    <ApolloProvider client={client}>
-      <Router>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </Router>
-    </ApolloProvider>
+    <EntryProvider>
+      <ApolloProvider client={client}>
+        <Router>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </Router>
+      </ApolloProvider>
+    </EntryProvider>
   </AuthProvider>
 );
 

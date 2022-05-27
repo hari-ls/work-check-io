@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import moment from "moment";
 
-function EditEntry({ id, checkIn, plan, summary }) {
+function EditEntry({ id, checkIn, plan, summary, checkOut }) {
   const getDuration = () => {
     const startTime = moment.unix(checkIn / 1000);
     const endTime = moment();
@@ -59,9 +59,6 @@ function EditEntry({ id, checkIn, plan, summary }) {
           <div className="flex flex-row gap-4">
             <button type="button" className="btn">
               Update
-            </button>
-            <button type="button" className="btn btn-primary">
-              Check out
             </button>
           </div>
         </form>
