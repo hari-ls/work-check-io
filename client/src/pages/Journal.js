@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { useQuery, gql } from "@apollo/client";
+import { COMPLIE_JOURNAL } from "../utils/queries";
 import moment from "moment";
 import Chart from "chart.js/auto";
 import JournalEntries from "../components/JournalTable";
@@ -11,30 +12,30 @@ function Journal(props) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const COMPLIE_JOURNAL = gql`
-    query Journal($start: String!, $end: String!) {
-      journal(start: $start, end: $end) {
-        from
-        to
-        entries {
-          _id
-          checkIn
-          plan
-          summary
-          productivity
-          mood
-          checkOut
-          duration
-        }
-      }
-    }
-  `;
+  // const COMPLIE_JOURNAL = gql`
+  //   query Journal($start: String!, $end: String!) {
+  //     journal(start: $start, end: $end) {
+  //       from
+  //       to
+  //       entries {
+  //         _id
+  //         checkIn
+  //         plan
+  //         summary
+  //         productivity
+  //         mood
+  //         checkOut
+  //         duration
+  //       }
+  //     }
+  //   }
+  // `;
 
   const [fromDate, setfromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
   useEffect(() => {
-    setfromDate(moment().startOf("month"));
+    setfromDate(moment().startOf("week"));
     setToDate(moment().endOf("day"));
     // setfromDate("2022-04-14");
     // setToDate("2022-04-21");
