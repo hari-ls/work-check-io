@@ -1,15 +1,22 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { EntryContext, EntryProvider } from "../context/entryContext";
+import { EntryContext } from "../context/entryContext";
 import { useQuery } from "@apollo/client";
 import { OPEN_ENTRY } from "../utils/queries";
 import StartEntry from "../components/StartEntry";
 import EditEntry from "../components/EditEntry";
+import EndEntry from "../components/EndEntry";
 
 function Home(props) {
   const { user } = useContext(AuthContext);
   const { checkedIn, entry, checkIn, checkOut } = useContext(EntryContext);
+
+  const [showModal, setShowModal] = useState();
+
+  useEffect(() => {
+    setShowModal(false);
+  }, []);
 
   const { loading, data } = useQuery(OPEN_ENTRY, {
     onCompleted(data) {
@@ -27,6 +34,7 @@ function Home(props) {
 
   return (
     <main>
+      <EndEntry />
       <div className="container flex flex-col px-6 py-8 max-w-7xl space-y-4 mx-auto">
         {user ? (
           <div>
@@ -41,7 +49,13 @@ function Home(props) {
                   </button>
                 </Link>
                 {checkedIn ? (
-                  <button type="button" className="btn btn-primary">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                  >
                     Check out
                   </button>
                 ) : (
