@@ -35,8 +35,8 @@ function Journal(props) {
 
   useEffect(() => {
     setfromDate(moment().startOf("month"));
-    // setfromDate("2022-04-14");
     setToDate(moment().endOf("day"));
+    // setfromDate("2022-04-14");
     // setToDate("2022-04-21");
   }, []);
 
@@ -44,19 +44,26 @@ function Journal(props) {
     let selectedRange = event.target.value;
     console.log(selectedRange);
     switch (selectedRange) {
-      case "This week":
+      case "This Week":
+        setfromDate(moment().startOf("week"));
+        setToDate(moment().endOf("day"));
         break;
-      case "This month":
+      case "This Month":
+        setfromDate(moment().startOf("month"));
+        setToDate(moment().endOf("day"));
         break;
-      case "Last month":
+      case "This Quarter":
+        setfromDate(moment().startOf("quarter"));
+        setToDate(moment().endOf("day"));
         break;
-      case "Last quarter":
-        break;
-      case "This year":
+      case "This Year":
+        setfromDate(moment().startOf("year"));
+        setToDate(moment().endOf("day"));
         break;
       default:
         return;
     }
+    console.log(fromDate, toDate);
   };
 
   const { loading, data } = useQuery(COMPLIE_JOURNAL, {
@@ -87,9 +94,9 @@ function Journal(props) {
                   onChange={handleChange}
                 >
                   <option defaultValue>This Week</option>
-                  <option>Last Week</option>
                   <option>This Month</option>
-                  <option>Last Month</option>
+                  <option>This Quarter</option>
+                  <option>This Year</option>
                 </select>
                 <Link to="/">
                   <button type="button" className="btn">
