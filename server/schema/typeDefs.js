@@ -56,12 +56,7 @@ const typeDefs = gql`
       confirmPassword: String!
     ): Auth
     checkIn(start: String!): Entry
-    updateEntry(
-      _id: ID!
-      plan: String
-      summary: String
-      productivity: Float
-    ): Entry
+    updateEntry(_id: ID!, plan: String, summary: String): Entry
     checkOut(
       _id: ID!
       plan: String

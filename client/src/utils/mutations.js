@@ -58,7 +58,16 @@ export const CHECKIN = gql`
 `;
 
 // UPDATE_ENTRY
-// export const UPDATE_ENTRY = gql``;
+export const UPDATE_ENTRY = gql`
+  mutation UpdateEntry($id: ID!, $plan: String, $summary: String) {
+    entry: updateEntry(_id: $id, plan: $plan, summary: $summary) {
+      _id
+      checkIn
+      plan
+      summary
+    }
+  }
+`;
 
 // CHECKOUT
 export const CHECKOUT = gql`

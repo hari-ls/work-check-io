@@ -11,6 +11,7 @@ const EntryContext = createContext({
   entry: null,
   checkingOut: false,
   checkIn: (entryData) => {},
+  update: (entryData) => {},
   finalise: (bool) => {},
   checkOut: () => {},
 });
@@ -23,6 +24,12 @@ function entryReducer(state, action) {
         checkedIn: true,
         entry: action.payload,
         checkingOut: false,
+      };
+
+    case "UPDATE":
+      return {
+        ...state,
+        entry: action.payload,
       };
     case "OPEN":
       return {
@@ -50,9 +57,16 @@ function EntryProvider(props) {
   const [state, dispatch] = useReducer(entryReducer, initialState);
 
   const checkIn = (entryData) => {
-    console.log(entryData);
+    console.log("CHECKIN", entryData);
     dispatch({
       type: "CHECKIN",
+      payload: entryData,
+    });
+  };
+  const update = (entryData) => {
+    console.log("UPDATE", entryData);
+    dispatch({
+      type: "UPDATE",
       payload: entryData,
     });
   };
@@ -80,6 +94,7 @@ function EntryProvider(props) {
         entry: state.entry,
         checkingOut: state.checkingOut,
         checkIn,
+        update,
         finalising,
         checkOut,
       }}

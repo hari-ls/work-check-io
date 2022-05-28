@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMutation, gql } from "@apollo/client";
+import { UPDATE_ENTRY } from "../utils/mutations";
 import moment from "moment";
 import { useForm } from "../utils/hooks";
+import Loading from "./Loading";
 
-function EditEntry({ id, checkIn, plan, summary }) {
+function EditEntry({ id, checkIn, plan, summary, update }) {
+  const [errors, setErrors] = useState([]);
+
   const getDuration = () => {
     const startTime = moment.unix(checkIn / 1000);
     const endTime = moment();
@@ -20,8 +24,20 @@ function EditEntry({ id, checkIn, plan, summary }) {
 
   const [durationState, setDurationState] = useState(getDuration());
 
+  // const UPDATE_ENTRY = gql`
+  //   mutation UpdateEntry($id: ID!, $plan: String, $summary: String) {
+  //     entry: updateEntry(_id: $id, plan: $plan, summary: $summary) {
+  //       _id
+  //       checkIn
+  //       plan
+  //       summary
+  //     }
+  //   }
+  // `;
+
   function invokeEntryUpdate() {
     console.log("Updated invoked");
+    editEntry();
   }
 
   const { onChange, onSubmit, values } = useForm(invokeEntryUpdate, {
@@ -31,8 +47,21 @@ function EditEntry({ id, checkIn, plan, summary }) {
 
   useEffect(() => {
     setInterval(() => setDurationState(getDuration()), 1000);
-    console.log(values.plan, values.summary, "from effect");
-  }, [values]);
+  }, []);
+
+  const [editEntry, { loading }] = useMutation(UPDATE_ENTRY, {
+    update(_, { data: { entry: entryData } }) {
+      console.log(entryData);
+      update(entryData);
+    },
+    variables: {
+      id: id,
+      plan: values.plan,
+      summary: values.summary,
+    },
+  });
+
+  if (loading) return <Loading />;
 
   return (
     <div>
@@ -58,7 +87,7 @@ function EditEntry({ id, checkIn, plan, summary }) {
               placeholder="What do you plan to accomplish today?"
               rows="5"
               onChange={onChange}
-              value={values.plan}
+              value={values.plan ? values.plan : ""}
             ></textarea>
           </div>
           <div>
@@ -71,12 +100,12 @@ function EditEntry({ id, checkIn, plan, summary }) {
               placeholder="A summary of things..."
               rows="10"
               onChange={onChange}
-              value={values.summary}
+              value={values.summary ? values.summary : ""}
             ></textarea>
           </div>
           <div className="flex flex-row gap-4">
-            <button type="button" className="btn">
-              Update
+            <button type="button" className="btn" onClick={onSubmit}>
+              Save
             </button>
           </div>
         </form>

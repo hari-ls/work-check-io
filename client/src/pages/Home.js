@@ -10,10 +10,15 @@ import EndEntry from "../components/EndEntry";
 
 function Home(props) {
   const { user } = useContext(AuthContext);
-  const { checkedIn, entry, checkingOut, checkIn, finalising, checkOut } =
-    useContext(EntryContext);
-
-  const [showModal, setShowModal] = useState();
+  const {
+    checkedIn,
+    entry,
+    checkingOut,
+    checkIn,
+    update,
+    finalising,
+    checkOut,
+  } = useContext(EntryContext);
 
   // useEffect(() => {
   //   console.log(checkingOut);
@@ -69,6 +74,7 @@ function Home(props) {
                   checkIn={entry.checkIn}
                   plan={entry.plan}
                   summary={entry.summary}
+                  update={update}
                 />
                 {checkingOut ? (
                   <EndEntry

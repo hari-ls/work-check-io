@@ -137,7 +137,7 @@ const resolvers = {
           { plan, summary },
           { new: true }
         );
-        return { entry };
+        return entry;
       }
       throw new ForbiddenError("Permission denied!");
     },
@@ -158,14 +158,14 @@ const resolvers = {
           },
           { new: true }
         );
-        return { entry };
+        return entry;
       }
       throw new ForbiddenError("Permission denied!");
     },
     removeEntry: async (parent, { _id }, context) => {
       if (context.user) {
         const entry = Entry.deleteOne({ _id });
-        return { entry };
+        return entry;
       }
       throw new ForbiddenError("Permission denied!");
     },
