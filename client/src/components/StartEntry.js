@@ -19,7 +19,8 @@ function StartEntry(props) {
   //   }
   // `;
 
-  const timeStamp = moment().format();
+  const timeStamp = () => moment().format();
+
   console.log(typeof timeStamp);
   const [startEntry, { loading }] = useMutation(CHECKIN, {
     update(_, { data: { entry: entryData } }) {
@@ -29,7 +30,7 @@ function StartEntry(props) {
     //   setErrors(graphQLErrors);
     // },
     variables: {
-      start: timeStamp,
+      start: moment().format(), // check for exact time when triggering
     },
   });
 

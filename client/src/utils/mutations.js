@@ -61,7 +61,32 @@ export const CHECKIN = gql`
 // export const UPDATE_ENTRY = gql``;
 
 // CHECKOUT
-// export const CHECKOUT = gql``;
+export const CHECKOUT = gql`
+  mutation Checkout(
+    $id: ID!
+    $productivity: Float!
+    $mood: Moods!
+    $end: String!
+    $plan: String
+    $summary: String
+  ) {
+    checkOut(
+      _id: $id
+      productivity: $productivity
+      mood: $mood
+      end: $end
+      plan: $plan
+      summary: $summary
+    ) {
+      _id
+      checkIn
+      checkOut
+      duration
+      productivity
+      mood
+    }
+  }
+`;
 
 // DELETE_ENTRY
 // export const DELETE_ENTRY = gql``;

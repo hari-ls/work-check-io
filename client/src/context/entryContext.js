@@ -3,12 +3,15 @@ import { createContext, useReducer } from "react";
 const initialState = {
   checkedIn: false,
   entry: null,
+  checkingOut: false,
 };
 // create context
 const EntryContext = createContext({
   checkedIn: false,
   entry: null,
+  checkingOut: false,
   checkIn: (entryData) => {},
+  finalise: (bool) => {},
   checkOut: () => {},
 });
 // define reducer
@@ -19,12 +22,24 @@ function entryReducer(state, action) {
         ...state,
         checkedIn: true,
         entry: action.payload,
+        checkingOut: false,
+      };
+    case "OPEN":
+      return {
+        ...state,
+        checkingOut: true,
+      };
+    case "CLOSE":
+      return {
+        ...state,
+        checkingOut: false,
       };
     case "CHECKOUT":
       return {
         ...state,
         checkedIn: false,
         entry: null,
+        checkingOut: false,
       };
     default:
       return state;
@@ -41,6 +56,17 @@ function EntryProvider(props) {
       payload: entryData,
     });
   };
+  const finalising = (bool) => {
+    if (bool) {
+      dispatch({
+        type: "OPEN",
+      });
+    } else {
+      dispatch({
+        type: "CLOSE",
+      });
+    }
+  };
   const checkOut = () => {
     dispatch({
       type: "CHECKOUT",
@@ -52,7 +78,9 @@ function EntryProvider(props) {
       value={{
         checkedIn: state.checkedIn,
         entry: state.entry,
+        checkingOut: state.checkingOut,
         checkIn,
+        finalising,
         checkOut,
       }}
       {...props}

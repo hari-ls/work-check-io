@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import moment from "moment";
 import { useForm } from "../utils/hooks";
 
-function EditEntry({ id, checkIn, plan, summary, checkOut }) {
+function EditEntry({ id, checkIn, plan, summary }) {
   const getDuration = () => {
     const startTime = moment.unix(checkIn / 1000);
     const endTime = moment();
@@ -19,9 +20,19 @@ function EditEntry({ id, checkIn, plan, summary, checkOut }) {
 
   const [durationState, setDurationState] = useState(getDuration());
 
+  function invokeEntryUpdate() {
+    console.log("Updated invoked");
+  }
+
+  const { onChange, onSubmit, values } = useForm(invokeEntryUpdate, {
+    plan: plan,
+    summary: summary,
+  });
+
   useEffect(() => {
     setInterval(() => setDurationState(getDuration()), 1000);
-  }, []);
+    console.log(values.plan, values.summary, "from effect");
+  }, [values]);
 
   return (
     <div>
@@ -42,9 +53,12 @@ function EditEntry({ id, checkIn, plan, summary, checkOut }) {
               Plan
             </label>
             <textarea
+              name="plan"
               className="textarea textarea-bordered w-full"
               placeholder="What do you plan to accomplish today?"
               rows="5"
+              onChange={onChange}
+              value={values.plan}
             ></textarea>
           </div>
           <div>
@@ -52,9 +66,12 @@ function EditEntry({ id, checkIn, plan, summary, checkOut }) {
               Summary
             </label>
             <textarea
+              name="summary"
               className="textarea textarea-bordered w-full"
               placeholder="A summary of things..."
               rows="10"
+              onChange={onChange}
+              value={values.summary}
             ></textarea>
           </div>
           <div className="flex flex-row gap-4">

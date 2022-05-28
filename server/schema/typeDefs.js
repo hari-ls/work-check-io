@@ -62,7 +62,14 @@ const typeDefs = gql`
       summary: String
       productivity: Float
     ): Entry
-    checkOut(_id: ID!, productivity: Float!, mood: Moods!, end: String!): Entry
+    checkOut(
+      _id: ID!
+      plan: String
+      summary: String
+      productivity: Float!
+      mood: Moods!
+      end: String!
+    ): Entry
     removeEntry(_id: ID!): Entry
     updateUserInfo(
       username: String!

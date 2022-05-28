@@ -132,18 +132,32 @@ const resolvers = {
     },
     updateEntry: async (parent, { _id, plan, summary }, context) => {
       if (context.user) {
-        const entry = Entry.findByIdAndUpdate({ _id }, { plan, summary });
+        const entry = await Entry.findByIdAndUpdate(
+          { _id },
+          { plan, summary },
+          { new: true }
+        );
         return { entry };
       }
       throw new ForbiddenError("Permission denied!");
     },
-    checkOut: async (parent, { _id, productivity, mood, end }, context) => {
+    checkOut: async (
+      parent,
+      { _id, plan, summary, productivity, mood, end },
+      context
+    ) => {
       if (context.user) {
-        const entry = Entry.findByIdAndUpdate(_id, {
-          productivity,
-          mood,
-          checkOut: end,
-        });
+        const entry = await Entry.findByIdAndUpdate(
+          _id,
+          {
+            plan,
+            summary,
+            productivity,
+            mood,
+            checkOut: end,
+          },
+          { new: true }
+        );
         return { entry };
       }
       throw new ForbiddenError("Permission denied!");

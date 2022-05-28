@@ -10,21 +10,20 @@ import EndEntry from "../components/EndEntry";
 
 function Home(props) {
   const { user } = useContext(AuthContext);
-  const { checkedIn, entry, checkIn, checkOut } = useContext(EntryContext);
+  const { checkedIn, entry, checkingOut, checkIn, finalising, checkOut } =
+    useContext(EntryContext);
 
   const [showModal, setShowModal] = useState();
 
-  useEffect(() => {
-    setShowModal(false);
-  }, []);
+  // useEffect(() => {
+  //   console.log(checkingOut);
+  // }, [checkingOut]);
 
-  const { loading, data } = useQuery(OPEN_ENTRY, {
+  const { loading } = useQuery(OPEN_ENTRY, {
     onCompleted(data) {
-      console.log(data.entry, checkedIn, entry);
+      console.log(data.entry);
       if (data.entry) {
-        console.log("checked in");
         checkIn(data.entry);
-        console.log(checkedIn, entry);
       }
     },
     skip: !user,
@@ -34,7 +33,6 @@ function Home(props) {
 
   return (
     <main>
-      <EndEntry />
       <div className="container flex flex-col px-6 py-8 max-w-7xl space-y-4 mx-auto">
         {user ? (
           <div>
@@ -53,10 +51,10 @@ function Home(props) {
                     type="button"
                     className="btn btn-primary"
                     onClick={() => {
-                      setShowModal(true);
+                      finalising(true);
                     }}
                   >
-                    Check out
+                    Check out {checkingOut}
                   </button>
                 ) : (
                   <></>
@@ -65,12 +63,25 @@ function Home(props) {
             </div>
 
             {checkedIn ? (
-              <EditEntry
-                id={entry._id}
-                checkIn={entry.checkIn}
-                plan={entry.plan}
-                summary={entry.summary}
-              />
+              <>
+                <EditEntry
+                  id={entry._id}
+                  checkIn={entry.checkIn}
+                  plan={entry.plan}
+                  summary={entry.summary}
+                />
+                {checkingOut ? (
+                  <EndEntry
+                    id={entry._id}
+                    plan={entry.plan}
+                    summary={entry.summary}
+                    checkOut={checkOut}
+                    finalise={finalising}
+                  />
+                ) : (
+                  <></>
+                )}
+              </>
             ) : (
               <StartEntry checkIn={checkIn} />
             )}

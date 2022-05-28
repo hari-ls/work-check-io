@@ -39,12 +39,12 @@ function Register(props) {
   //   }
   // `;
 
-  function registerUserCB() {
+  function invokeRegisterUser() {
     console.log("Callback hit");
     registerUser();
   }
 
-  const { onChange, onSubmit, values } = useForm(registerUserCB, {
+  const { onChange, onSubmit, values } = useForm(invokeRegisterUser, {
     firstName: "",
     lastName: "",
     email: "",
