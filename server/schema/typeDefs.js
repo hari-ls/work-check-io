@@ -67,11 +67,12 @@ const typeDefs = gql`
     ): Entry
     removeEntry(_id: ID!): Entry
     updateUserInfo(
-      username: String!
-      firstName: String!
-      lastName: String!
+      username: String
+      firstName: String
+      lastName: String
+      email: String
     ): User
-    updateUserPass(password: String!): User
+    changePassword(newPassword: String!, confirmNewPassword: String!): User
   }
 `;
 // export type definitions

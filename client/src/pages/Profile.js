@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import { USER_INFO } from "../utils/queries";
 import Loading from "../components/Loading";
+import UpdateInfo from "../components/UpdateInfo";
+import ChangePassword from "../components/ChangePassword";
 
 function Profile(props) {
   const { user } = useContext(AuthContext);
@@ -29,6 +31,24 @@ function Profile(props) {
   //     }
   //   }
   // `;
+
+  const CHANGE_PASSWORD = gql`
+    mutation changePassword(
+      $newPassword: String!
+      $confirmNewPassword: String!
+    ) {
+      changePassword(
+        newPassword: $newPassword
+        confirmNewPassword: $confirmNewPassword
+      ) {
+        _id
+        firstName
+        lastName
+        email
+        username
+      }
+    }
+  `;
 
   const { loading, data } = useQuery(USER_INFO, {
     onCompleted(data) {
@@ -60,10 +80,15 @@ function Profile(props) {
             </div>
             {data.user ? (
               <div>
-                <p>{data.user.username}</p>
-                <p>{data.user.firstName}</p>
-                <p>{data.user.lastName}</p>
-                <p>{data.user.email}</p>
+                <div className="divide-y divide-base-300 space-y-4">
+                  <UpdateInfo
+                    firstName={data.user.firstName}
+                    lastName={data.user.lastName}
+                    email={data.user.email}
+                    username={data.user.username}
+                  />
+                  <ChangePassword />
+                </div>
               </div>
             ) : (
               <></>

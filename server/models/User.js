@@ -59,8 +59,20 @@ userSchema.virtual("initials").get(function () {
 // setup middleware for encrypting password
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
+    console.log("Password updated!");
     const rounds = 10; // salt rounds
     this.password = await bcrypt.hash(this.password, rounds);
+  }
+  next();
+});
+userSchema.pre("findOneAndUpdate", async function (next) {
+  let update = { ...this.getUpdate() };
+  console.log(update);
+  if (update.password) {
+    console.log("Password updated!");
+    const rounds = 10; // salt rounds
+    update.password = await bcrypt.hash(update.password, rounds);
+    this.setUpdate(update);
   }
   next();
 });

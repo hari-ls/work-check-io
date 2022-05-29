@@ -164,32 +164,39 @@ const resolvers = {
     },
     removeEntry: async (parent, { _id }, context) => {
       if (context.user) {
-        const entry = Entry.deleteOne({ _id });
+        const entry = await Entry.deleteOne({ _id });
         return entry;
       }
       throw new ForbiddenError("Permission denied!");
     },
     updateUserInfo: async (
       parent,
-      { firstName, lastName, username },
+      { firstName, lastName, email, username },
       context
     ) => {
       if (context.user) {
-        const user = User.findByIdAndUpdate(
+        const user = await User.findByIdAndUpdate(
           context.user._id,
-          { firstName, lastName, username },
+          { firstName, lastName, email, username },
           { new: true }
         );
-        return { user };
+        return user;
       }
       throw new ForbiddenError("Permission denied!");
     },
-    updateUserPass: async (parent, { password }, context) => {
-      if (context.user) {
-        const user = User.findByIdAndUpdate(context.user._id, {
-          password,
-        });
-        return { user };
+    changePassword: async (
+      parent,
+      { newPassword, confirmNewPassword },
+      context
+    ) => {
+      const passCheck = newPassword === confirmNewPassword;
+      if (context.user && passCheck) {
+        const user = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { password: newPassword },
+          { new: true }
+        );
+        return user;
       }
       throw new ForbiddenError("Permission denied!");
     },

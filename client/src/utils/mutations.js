@@ -101,7 +101,40 @@ export const CHECKOUT = gql`
 // export const DELETE_ENTRY = gql``;
 
 // UPDATE_PROFILE
-// export const UPDATE_PROFILE = gql``;
+export const UPDATE_INFO = gql`
+  mutation updateUserInfo(
+    $firstName: String
+    $lastName: String
+    $email: String
+    $username: String
+  ) {
+    updateUserInfo(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      username: $username
+    ) {
+      _id
+      firstName
+      lastName
+      email
+      username
+    }
+  }
+`;
 
 // UPDATE_PASSWORD
-// export const UPDATE_PROFILE = gql``;
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword($newPassword: String!, $confirmNewPassword: String!) {
+    changePassword(
+      newPassword: $newPassword
+      confirmNewPassword: $confirmNewPassword
+    ) {
+      _id
+      firstName
+      lastName
+      email
+      username
+    }
+  }
+`;
