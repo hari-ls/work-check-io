@@ -1,6 +1,6 @@
 import TableEntryRow from "./TableEntryRow";
 
-function JournalEntries({ entries }) {
+function JournalEntries({ entries, remove }) {
   return (
     <div>
       {/* <div>
@@ -31,6 +31,7 @@ function JournalEntries({ entries }) {
                 id={entry._id}
                 key={entry._id}
                 no={index + 1}
+                changer={remove}
               />
             ))}
           </tbody>

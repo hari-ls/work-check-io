@@ -32,24 +32,6 @@ function Profile(props) {
   //   }
   // `;
 
-  const CHANGE_PASSWORD = gql`
-    mutation changePassword(
-      $newPassword: String!
-      $confirmNewPassword: String!
-    ) {
-      changePassword(
-        newPassword: $newPassword
-        confirmNewPassword: $confirmNewPassword
-      ) {
-        _id
-        firstName
-        lastName
-        email
-        username
-      }
-    }
-  `;
-
   const { loading, data } = useQuery(USER_INFO, {
     onCompleted(data) {
       console.log(data.user);

@@ -31,15 +31,10 @@ function Journal(props) {
   //   }
   // `;
 
+  const [selected, setSelected] = useState("");
   const [fromDate, setfromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
-  useEffect(() => {
-    setfromDate(moment().startOf("week"));
-    setToDate(moment().endOf("day"));
-    // setfromDate("2022-04-14");
-    // setToDate("2022-04-21");
-  }, []);
+  const [entries, setEntries] = useState([]);
 
   const handleChange = (event) => {
     let selectedRange = event.target.value;
@@ -48,20 +43,26 @@ function Journal(props) {
       case "This Week":
         setfromDate(moment().startOf("week"));
         setToDate(moment().endOf("day"));
+        setSelected(selectedRange);
         break;
       case "This Month":
         setfromDate(moment().startOf("month"));
         setToDate(moment().endOf("day"));
+        setSelected(selectedRange);
         break;
       case "This Quarter":
         setfromDate(moment().startOf("quarter"));
         setToDate(moment().endOf("day"));
+        setSelected(selectedRange);
         break;
       case "This Year":
         setfromDate(moment().startOf("year"));
         setToDate(moment().endOf("day"));
+        setSelected(selectedRange);
         break;
       default:
+        setfromDate(moment().startOf("week"));
+        setToDate(moment().endOf("day"));
         return;
     }
     console.log(fromDate, toDate);
@@ -70,6 +71,11 @@ function Journal(props) {
   const { loading, data } = useQuery(COMPLIE_JOURNAL, {
     onCompleted(data) {
       console.log(data.journal);
+      if (data && data.journal && data.journal.entries.length > 0) {
+        console.log("Entries updated from completed");
+        setEntries(data.journal.entries);
+        console.log(entries);
+      }
     },
     variables: {
       start: fromDate,
@@ -78,7 +84,29 @@ function Journal(props) {
     skip: !user,
   });
 
+  useEffect(() => {
+    setSelected("This Week");
+    setfromDate(moment().startOf("week"));
+    setToDate(moment().endOf("day"));
+    // setfromDate("2022-04-14");
+    // setToDate("2022-04-21");
+  }, []);
+
+  // useEffect(() => {
+  //   if (data && data.journal && data.journal.entries.length > 0) {
+  //     console.log("Entries updated from effect");
+  //     setEntries(data.journal.entries);
+  //   }
+  // }, [data]);
+
   if (loading) return <Loading />;
+
+  const removeFromList = (findId) => {
+    const entriesList = entries.filter((object) => {
+      return object._id !== findId;
+    });
+    setEntries(entriesList);
+  };
 
   return (
     <main>
@@ -92,9 +120,10 @@ function Journal(props) {
               <div className="mt-3 flex flex-auto gap-4 sm:mt-0 sm:ml-4 w-auto justify-end">
                 <select
                   className="select select-bordered select-md w-full max-w-xs"
+                  value={selected}
                   onChange={handleChange}
                 >
-                  <option defaultValue>This Week</option>
+                  <option>This Week</option>
                   <option>This Month</option>
                   <option>This Quarter</option>
                   <option>This Year</option>
@@ -106,8 +135,10 @@ function Journal(props) {
                 </Link>
               </div>
             </div>
-            {data.journal.entries.length > 0 ? (
-              <JournalEntries entries={data.journal.entries} />
+            {entries.length > 0 ? (
+              <>
+                <JournalEntries entries={entries} remove={removeFromList} />
+              </>
             ) : (
               <div>
                 <p>No entries not found!</p>
