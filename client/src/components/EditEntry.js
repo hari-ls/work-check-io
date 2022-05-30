@@ -55,7 +55,7 @@ function EditEntry({ id, checkIn, plan, summary, update }) {
 
   return (
     <div>
-      <div className="flex flex-row justify-between py-4">
+      <div className="flex flex-col md:flex-row justify-between py-4">
         <p>
           <strong>Check in:</strong>{" "}
           {moment.unix(checkIn / 1000).format("dddd, MMMM Do YYYY, h:mm a")}

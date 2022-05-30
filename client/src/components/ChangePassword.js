@@ -1,11 +1,10 @@
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CHANGE_PASSWORD } from "../utils/mutations";
 import { useForm } from "../utils/hooks";
 import Loading from "./Loading";
 
 function ChangePassword(props) {
   function invokePassChange() {
-    console.log("Pass change invoked");
     changePassword();
     values.newPassword = "";
     values.confirmNewPassword = "";
@@ -16,28 +15,7 @@ function ChangePassword(props) {
     confirmNewPassword: "",
   });
 
-  //   const CHANGE_PASSWORD = gql`
-  //     mutation changePassword(
-  //       $newPassword: String!
-  //       $confirmNewPassword: String!
-  //     ) {
-  //       changePassword(
-  //         newPassword: $newPassword
-  //         confirmNewPassword: $confirmNewPassword
-  //       ) {
-  //         _id
-  //         firstName
-  //         lastName
-  //         email
-  //         username
-  //       }
-  //     }
-  //   `;
-
   const [changePassword, { loading }] = useMutation(CHANGE_PASSWORD, {
-    update(_, { data: { user: userData } }) {
-      console.log(userData);
-    },
     variables: {
       newPassword: values.newPassword,
       confirmNewPassword: values.confirmNewPassword,

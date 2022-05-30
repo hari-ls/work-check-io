@@ -27,7 +27,7 @@ function Profile(props) {
               <div className="mt-3 flex flex-auto">
                 <h2 className="text-4xl font-bold">My Profile</h2>
               </div>
-              <div className="mt-3 flex flex-auto gap-4 sm:mt-0 sm:ml-4 w-auto justify-end">
+              <div className="mt-3 flex flex-auto gap-4 sm:mt-0 sm:ml-4 w-auto md:justify-end">
                 <button
                   type="button"
                   className="btn"

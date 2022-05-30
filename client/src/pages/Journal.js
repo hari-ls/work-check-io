@@ -89,7 +89,7 @@ function Journal(props) {
               <div className="mt-3 flex flex-auto">
                 <h2 className="text-4xl font-bold">My Journal</h2>
               </div>
-              <div className="mt-3 flex flex-auto gap-4 sm:mt-0 sm:ml-4 w-auto justify-end">
+              <div className="mt-3 flex flex-col md:flex-row gap-4 sm:mt-0 sm:ml-4 w-auto sm:justify-start md:justify-end">
                 <select
                   className="select select-bordered select-md w-full max-w-xs"
                   onChange={handleChange}

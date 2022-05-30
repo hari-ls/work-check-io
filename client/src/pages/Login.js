@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { LOGIN } from "../utils/mutations";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../utils/hooks";
@@ -52,7 +52,7 @@ function Login(props) {
             src={process.env.PUBLIC_URL + "/logo.svg"}
             alt="Logo"
           />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold">
             Sign in to your account
           </h2>
         </div>

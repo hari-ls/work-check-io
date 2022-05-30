@@ -60,7 +60,7 @@ function Register(props) {
             src={process.env.PUBLIC_URL + "/logo.svg"}
             alt="Logo"
           />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold">
             Create a new account
           </h2>
         </div>
