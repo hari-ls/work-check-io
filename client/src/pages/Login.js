@@ -12,22 +12,7 @@ function Login(props) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
-  // const LOGIN = gql`
-  //   mutation Login($username: String!, $password: String!) {
-  //     login(username: $username, password: $password) {
-  //       token
-  //       user {
-  //         _id
-  //         username
-  //         firstName
-  //         lastName
-  //       }
-  //     }
-  //   }
-  // `;
-
   function loginUserCB() {
-    console.log("Callback hit");
     loginUser();
   }
 

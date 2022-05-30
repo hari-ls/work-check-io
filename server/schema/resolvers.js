@@ -56,11 +56,6 @@ const resolvers = {
           checkOut: { $lte: end },
         }).sort("-checkIn");
 
-        // const durations = entries.map((entry) => entry.duration);
-        // const totalDuration = entries.reduce((prev, curr) => prev + curr, 0);
-        // const avgProductivity = "";
-        // const overallMood = "";
-
         return { from, to, entries };
       }
       throw new ForbiddenError("Permission denied!");

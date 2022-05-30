@@ -1,9 +1,13 @@
 // import mongoose
 const mongoose = require("mongoose");
+require("dotenv").config();
 // set connection uri
 const URI = process.env.ATLAS_URI || "mongodb://127.0.0.1:27017/work-check-io";
 // establish connection
-mongoose.connect(URI);
+mongoose.connect(URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 // log status
 db.on("error", (err) => console.log(`Error: ${err}`));
