@@ -36,6 +36,8 @@ This app is intended to be used for productivity purposes. You can plan, summari
 
 ![Screenshot of the main application screen](./screenshot.png)
 
+To access the deployed application: [click here](https://work-check-io.herokuapp.com)
+
 ## License
 
 This project is covered under: **GNU GPLv3**
