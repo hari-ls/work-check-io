@@ -7,7 +7,7 @@ function JournalEntries({ entries, remove }) {
         <h3>Entries</h3>
       </div> */}
 
-      <div className="overflow-x-auto w-full">
+      <div className="py-6 overflow-x-auto w-full">
         <table className="table w-full">
           <thead>
             <tr>

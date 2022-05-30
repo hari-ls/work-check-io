@@ -48,7 +48,7 @@ function Home(props) {
               <div className="mt-3 flex gap-4 sm:mt-0 sm:ml-4">
                 <Link to="/journal">
                   <button type="button" className="btn">
-                    My Journal
+                    Journal
                   </button>
                 </Link>
                 {checkedIn ? (

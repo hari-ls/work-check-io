@@ -6,7 +6,7 @@ function Header(props) {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <header className="sticky top-0 w-full p-6">
+    <header className="sticky top-0 w-full p-6 z-10">
       {user ? (
         <div className="bg-base-200 rounded-xl flex flex-row justify-between w-full py-4 px-6 shadow-md">
           <div className="flex items-center justify-center">
