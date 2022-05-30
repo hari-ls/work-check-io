@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { ENTRY_DETAILS } from "../utils/queries";
 import ViewEntry from "../components/ViewEntry";
 import Loading from "../components/Loading";
@@ -13,24 +13,7 @@ function Entry(props) {
 
   const navigate = useNavigate();
 
-  // const ENTRY_DETAILS = gql`
-  //   query Entry($id: ID!) {
-  //     entry(_id: $id) {
-  //       checkIn
-  //       plan
-  //       summary
-  //       productivity
-  //       mood
-  //       checkOut
-  //       duration
-  //     }
-  //   }
-  // `;
-
   const { loading, data } = useQuery(ENTRY_DETAILS, {
-    onCompleted(data) {
-      console.log(data.entry);
-    },
     variables: {
       id: id,
     },
@@ -56,7 +39,7 @@ function Entry(props) {
                 </button>
                 <Link to="/journal">
                   <button type="button" className="btn">
-                    My Journal
+                    Journal
                   </button>
                 </Link>
               </div>

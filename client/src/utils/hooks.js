@@ -8,7 +8,6 @@ export const useForm = (cb, initialState = {}) => {
       ...values,
       [e.target.name]: e.target.value,
     });
-    console.log(values);
   };
 
   const onSubmit = (e) => {

@@ -1,41 +1,13 @@
-import { useContext, useState, useEffect } from "react";
-import { EntryContext } from "../context/entryContext";
+import { useState, useEffect } from "react";
 import { useForm } from "../utils/hooks";
-import { useMutation, gql } from "@apollo/client";
-// import { CHECKOUT } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
+import { CHECKOUT } from "../utils/mutations";
 import moment from "moment";
 import Loading from "./Loading";
+import Error from "./Error";
 
 function EndEntry({ id, plan, summary, checkOut, finalise }) {
   const [errors, setErrors] = useState([]);
-  // const [rangeValue, setRangeValue] = useState(5);
-
-  const CHECKOUT = gql`
-    mutation Checkout(
-      $id: ID!
-      $productivity: Float!
-      $mood: Moods!
-      $end: String!
-      $plan: String
-      $summary: String
-    ) {
-      entry: checkOut(
-        _id: $id
-        productivity: $productivity
-        mood: $mood
-        end: $end
-        plan: $plan
-        summary: $summary
-      ) {
-        _id
-        checkIn
-        checkOut
-        duration
-        productivity
-        mood
-      }
-    }
-  `;
 
   function invokeEntryCheckout() {
     console.log("Invoke checkout!");
@@ -47,22 +19,9 @@ function EndEntry({ id, plan, summary, checkOut, finalise }) {
     mood: "HAPPY",
   });
 
-  // const handleChange = (event) => {
-  //   setRangeValue(event.target.value);
-  //   console.log(event.target.value);
-  // };
-
-  //   useEffect(() => {
-
-  //   }, []);
-
   const timeStamp = () => moment().format();
 
-  const [endEntry, { loading }] = useMutation(CHECKOUT, {
-    update(_, { data: { entry: entryData } }) {
-      console.log(entryData);
-      checkOut();
-    },
+  const [endEntry, { loading, data }] = useMutation(CHECKOUT, {
     onError({ graphQLErrors }) {
       setErrors(graphQLErrors);
     },
@@ -75,6 +34,12 @@ function EndEntry({ id, plan, summary, checkOut, finalise }) {
       summary,
     },
   });
+
+  useEffect(() => {
+    if (data) {
+      checkOut();
+    }
+  }, [data, checkOut]);
 
   if (loading) return <Loading />;
 
@@ -143,6 +108,9 @@ function EndEntry({ id, plan, summary, checkOut, finalise }) {
           </div>
         </div>
       </div>
+      {errors.map((error) => {
+        return <Error message={error.message} />;
+      })}
     </div>
   );
 }

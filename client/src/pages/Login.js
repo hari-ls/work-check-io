@@ -4,6 +4,8 @@ import { useMutation, gql } from "@apollo/client";
 import { LOGIN } from "../utils/mutations";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../utils/hooks";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 function Login(props) {
   const context = useContext(AuthContext);
@@ -23,10 +25,6 @@ function Login(props) {
   //     }
   //   }
   // `;
-
-  const toggleBtnLoading = () => {
-    document.getElementById("loginBtn").classList.toggle("loading");
-  };
 
   function loginUserCB() {
     console.log("Callback hit");
@@ -52,24 +50,22 @@ function Login(props) {
     },
   });
 
-  if (loading) {
-    toggleBtnLoading();
-  }
-
   useEffect(() => {
     if (context.user) {
       navigate("/");
     }
   }, [context.user, navigate]);
 
+  if (loading) return <Loading />;
+
   return (
     <div>
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
-            className="mx-auto h-12 w-auto"
-            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-            alt="Workflow"
+            className="mx-auto h-14 w-auto"
+            src={process.env.PUBLIC_URL + "/logo.svg"}
+            alt="Logo"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
@@ -108,7 +104,7 @@ function Login(props) {
               <button
                 id="loginBtn"
                 type="submit"
-                className="btn btn-block mt-4"
+                className="btn btn-secondary btn-block mt-4"
               >
                 Login
               </button>
@@ -139,7 +135,7 @@ function Login(props) {
         </Link>
       </div>
       {errors.map((error) => {
-        return <li>{error.message}</li>;
+        return <Error message={error.message} />;
       })}
     </div>
   );

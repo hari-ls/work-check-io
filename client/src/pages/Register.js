@@ -1,46 +1,18 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../utils/hooks";
 import { REGISTER } from "../utils/mutations";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 function Register(props) {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
-  // const REGISTER = gql`
-  //   mutation Register(
-  //     $lastName: String!
-  //     $email: String!
-  //     $username: String!
-  //     $password: String!
-  //     $confirmPassword: String!
-  //     $firstName: String
-  //   ) {
-  //     register(
-  //       lastName: $lastName
-  //       email: $email
-  //       username: $username
-  //       password: $password
-  //       confirmPassword: $confirmPassword
-  //       firstName: $firstName
-  //     ) {
-  //       token
-  //       user {
-  //         _id
-  //         email
-  //         firstName
-  //         lastName
-  //         username
-  //       }
-  //     }
-  //   }
-  // `;
-
   function invokeRegisterUser() {
-    console.log("Callback hit");
     registerUser();
   }
 
@@ -77,14 +49,16 @@ function Register(props) {
     }
   }, [context.user, navigate]);
 
+  if (loading) return <Loading />;
+
   return (
     <div>
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
-            className="mx-auto h-12 w-auto"
-            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-            alt="Workflow"
+            className="mx-auto h-14 w-auto"
+            src={process.env.PUBLIC_URL + "/logo.svg"}
+            alt="Logo"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Create a new account
@@ -173,7 +147,7 @@ function Register(props) {
               <button
                 id="registerBtn"
                 type="submit"
-                className="btn btn-block mt-4"
+                className="btn btn-secondary btn-block mt-4"
               >
                 Register
               </button>
@@ -204,7 +178,7 @@ function Register(props) {
         </Link>
       </div>
       {errors.map(function (error) {
-        return <div>{error.message}</div>;
+        return <Error message={error.message} />;
       })}
     </div>
   );

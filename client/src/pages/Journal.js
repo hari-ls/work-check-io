@@ -1,35 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { COMPLIE_JOURNAL } from "../utils/queries";
 import moment from "moment";
-import Chart from "chart.js/auto";
 import JournalEntries from "../components/JournalTable";
 import Loading from "../components/Loading";
 
 function Journal(props) {
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  // const COMPLIE_JOURNAL = gql`
-  //   query Journal($start: String!, $end: String!) {
-  //     journal(start: $start, end: $end) {
-  //       from
-  //       to
-  //       entries {
-  //         _id
-  //         checkIn
-  //         plan
-  //         summary
-  //         productivity
-  //         mood
-  //         checkOut
-  //         duration
-  //       }
-  //     }
-  //   }
-  // `;
 
   const [selected, setSelected] = useState("");
   const [fromDate, setfromDate] = useState("");
@@ -38,7 +17,7 @@ function Journal(props) {
 
   const handleChange = (event) => {
     let selectedRange = event.target.value;
-    console.log(selectedRange);
+    setSelected(event.target.value);
     switch (selectedRange) {
       case "This Week":
         setfromDate(moment().startOf("week"));
@@ -61,20 +40,9 @@ function Journal(props) {
         setToDate(moment().endOf("day"));
         return;
     }
-    console.log(fromDate, toDate);
   };
 
-  const { loading, data } = useQuery(COMPLIE_JOURNAL, {
-    onCompleted(data) {
-      console.log(data.journal);
-      // if (data.journal.entries.length > 0) {
-      //   console.log("Entries updated from completed");
-      //   setEntries(data.journal.entries);
-      //   console.log(entries);
-      // } else {
-      //   setEntries([]);
-      // }
-    },
+  const { loading, data, refetch } = useQuery(COMPLIE_JOURNAL, {
     variables: {
       start: fromDate,
       end: toDate,
@@ -86,20 +54,22 @@ function Journal(props) {
     setSelected("This Week");
     setfromDate(moment().startOf("week"));
     setToDate(moment().endOf("day"));
+    refetch();
   }, []);
 
   useEffect(() => {
-    if (data.journal.entries.length > 0) {
-      console.log("Entries updated from effect");
-      setEntries(data.journal.entries);
-    } else {
-      setEntries([]);
+    if (data) {
+      if (data.journal.entries.length > 0) {
+        setEntries(data.journal.entries);
+      } else {
+        setEntries([]);
+      }
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   console.log(entries);
-  // }, [entries]);
+  useEffect(() => {
+    refetch();
+  }, [selected, refetch]);
 
   if (loading) return <Loading />;
 
@@ -123,6 +93,7 @@ function Journal(props) {
                 <select
                   className="select select-bordered select-md w-full max-w-xs"
                   onChange={handleChange}
+                  value={selected}
                 >
                   <option>This Week</option>
                   <option>This Month</option>
@@ -131,7 +102,7 @@ function Journal(props) {
                 </select>
                 <Link to="/">
                   <button type="button" className="btn">
-                    Today's Entry
+                    Entry
                   </button>
                 </Link>
               </div>

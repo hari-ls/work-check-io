@@ -11,7 +11,11 @@ function Header(props) {
         <div className="bg-base-200 rounded-xl flex flex-row justify-between w-full py-4 px-6 shadow-md">
           <div className="flex items-center justify-center">
             <Link to="/" className="normal-case text-2xl">
-              WorkCheck(In|Out)
+              <img
+                className="mx-auto h-12 w-auto"
+                src={process.env.PUBLIC_URL + "/logo.svg"}
+                alt="Logo"
+              />
             </Link>
           </div>
           <div>

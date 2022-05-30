@@ -3,10 +3,6 @@ import TableEntryRow from "./TableEntryRow";
 function JournalEntries({ entries, remove }) {
   return (
     <div>
-      {/* <div>
-        <h3>Entries</h3>
-      </div> */}
-
       <div className="py-6 overflow-x-auto w-full">
         <table className="table w-full">
           <thead>

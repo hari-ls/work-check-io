@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { EntryContext } from "../context/entryContext";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CHECKIN } from "../utils/mutations";
 import moment from "moment";
 import Loading from "../components/Loading";
@@ -8,27 +8,10 @@ import Loading from "../components/Loading";
 function StartEntry(props) {
   const { checkIn } = useContext(EntryContext);
 
-  // const CHECKIN = gql`
-  //   mutation Checkin($start: String!) {
-  //     entry: checkIn(start: $start) {
-  //       _id
-  //       checkIn
-  //       plan
-  //       summary
-  //     }
-  //   }
-  // `;
-
-  const timeStamp = () => moment().format();
-
-  console.log(typeof timeStamp);
   const [startEntry, { loading }] = useMutation(CHECKIN, {
     update(_, { data: { entry: entryData } }) {
       checkIn(entryData);
     },
-    // onError({ graphQLErrors }) {
-    //   setErrors(graphQLErrors);
-    // },
     variables: {
       start: moment().format(), // check for exact time when triggering
     },

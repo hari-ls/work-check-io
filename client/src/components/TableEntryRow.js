@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import { REMOVE_ENTRY } from "../utils/mutations";
 import moment from "moment";
 import Loading from "./Loading";
 
@@ -20,21 +21,11 @@ function TableEntryRow({
   const checkOutDate = moment.unix(checkOut / 1000).format("Do MMM YYYY");
 
   function invokeRemoveEntry() {
-    console.log("Remove entry invoked");
     removeEntry();
   }
 
-  const REMOVE_ENTRY = gql`
-    mutation RemoveEntry($id: ID!) {
-      entry: removeEntry(_id: $id) {
-        __typename
-      }
-    }
-  `;
-
   const [removeEntry, { loading }] = useMutation(REMOVE_ENTRY, {
     update(_, { data: { entry: entryData } }) {
-      console.log(entryData);
       if (entryData.__typename === "Entry") changer(id);
     },
     variables: {

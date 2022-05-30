@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { UPDATE_ENTRY } from "../utils/mutations";
 import moment from "moment";
 import { useForm } from "../utils/hooks";
 import Loading from "./Loading";
+import Error from "./Error";
 
 function EditEntry({ id, checkIn, plan, summary, update }) {
   const [errors, setErrors] = useState([]);
@@ -18,25 +19,12 @@ function EditEntry({ id, checkIn, plan, summary, update }) {
 
     const value = [hrs, min, sec].join(":");
 
-    // console.log(value);
     return value;
   };
 
   const [durationState, setDurationState] = useState(getDuration());
 
-  // const UPDATE_ENTRY = gql`
-  //   mutation UpdateEntry($id: ID!, $plan: String, $summary: String) {
-  //     entry: updateEntry(_id: $id, plan: $plan, summary: $summary) {
-  //       _id
-  //       checkIn
-  //       plan
-  //       summary
-  //     }
-  //   }
-  // `;
-
   function invokeEntryUpdate() {
-    console.log("Updated invoked");
     editEntry();
   }
 
@@ -51,8 +39,10 @@ function EditEntry({ id, checkIn, plan, summary, update }) {
 
   const [editEntry, { loading }] = useMutation(UPDATE_ENTRY, {
     update(_, { data: { entry: entryData } }) {
-      console.log(entryData);
       update(entryData);
+    },
+    onError({ graphQLErrors }) {
+      setErrors(graphQLErrors);
     },
     variables: {
       id: id,
@@ -65,10 +55,9 @@ function EditEntry({ id, checkIn, plan, summary, update }) {
 
   return (
     <div>
-      {/* <p>Edit an entry {id}</p> */}
       <div className="flex flex-row justify-between py-4">
         <p>
-          Check in:{" "}
+          <strong>Check in:</strong>{" "}
           {moment.unix(checkIn / 1000).format("dddd, MMMM Do YYYY, h:mm a")}
         </p>
         <span className="countup font-mono text-2xl">
@@ -110,6 +99,9 @@ function EditEntry({ id, checkIn, plan, summary, update }) {
           </div>
         </form>
       </div>
+      {errors.map(function (error) {
+        return <Error message={error.message} />;
+      })}
     </div>
   );
 }

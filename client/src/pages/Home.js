@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { EntryContext } from "../context/entryContext";
@@ -7,6 +7,7 @@ import { OPEN_ENTRY } from "../utils/queries";
 import StartEntry from "../components/StartEntry";
 import EditEntry from "../components/EditEntry";
 import EndEntry from "../components/EndEntry";
+import Loading from "../components/Loading";
 
 function Home(props) {
   const { user } = useContext(AuthContext);
@@ -20,13 +21,8 @@ function Home(props) {
     checkOut,
   } = useContext(EntryContext);
 
-  // useEffect(() => {
-  //   console.log(checkingOut);
-  // }, [checkingOut]);
-
   const { loading } = useQuery(OPEN_ENTRY, {
     onCompleted(data) {
-      console.log(data.entry);
       if (data.entry) {
         checkIn(data.entry);
       }
@@ -34,7 +30,7 @@ function Home(props) {
     skip: !user,
   });
 
-  if (loading) return <p>LOADING</p>;
+  if (loading) return <Loading />;
 
   return (
     <main>
@@ -54,12 +50,12 @@ function Home(props) {
                 {checkedIn ? (
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-secondary"
                     onClick={() => {
                       finalising(true);
                     }}
                   >
-                    Check out {checkingOut}
+                    Check out
                   </button>
                 ) : (
                   <></>
@@ -67,7 +63,7 @@ function Home(props) {
               </div>
             </div>
 
-            {checkedIn ? (
+            {checkedIn && entry ? (
               <>
                 <EditEntry
                   id={entry._id}

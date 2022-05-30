@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { USER_INFO } from "../utils/queries";
 import Loading from "../components/Loading";
 import UpdateInfo from "../components/UpdateInfo";
@@ -12,30 +12,7 @@ function Profile(props) {
 
   const navigate = useNavigate();
 
-  const [editUser, setEditUser] = useState(false);
-  const [editPassword, setEditPassword] = useState(false);
-
-  useEffect(() => {
-    setEditUser(false);
-    setEditPassword(false);
-    console.log(editUser, editPassword);
-  }, []);
-
-  // const USER_INFO = gql`
-  //   query User {
-  //     user {
-  //       username
-  //       firstName
-  //       lastName
-  //       email
-  //     }
-  //   }
-  // `;
-
   const { loading, data } = useQuery(USER_INFO, {
-    onCompleted(data) {
-      console.log(data.user);
-    },
     skip: !user,
   });
 

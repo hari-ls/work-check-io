@@ -54,7 +54,7 @@ const resolvers = {
           user: context.user._id,
           checkIn: { $gte: start },
           checkOut: { $lte: end },
-        });
+        }).sort("-checkIn");
 
         // const durations = entries.map((entry) => entry.duration);
         // const totalDuration = entries.reduce((prev, curr) => prev + curr, 0);

@@ -1,11 +1,10 @@
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { UPDATE_INFO } from "../utils/mutations";
 import { useForm } from "../utils/hooks";
 import Loading from "./Loading";
 
 function UpdateInfo({ firstName, lastName, email, username }) {
   function invokeUpdateInfo() {
-    console.log("Update info invoked");
     updateInfo();
   }
 
@@ -16,32 +15,7 @@ function UpdateInfo({ firstName, lastName, email, username }) {
     username,
   });
 
-  //   const UPDATE_INFO = gql`
-  //     mutation updateUserInfo(
-  //       $firstName: String
-  //       $lastName: String
-  //       $email: String
-  //       $username: String
-  //     ) {
-  //       updateUserInfo(
-  //         firstName: $firstName
-  //         lastName: $lastName
-  //         email: $email
-  //         username: $username
-  //       ) {
-  //         _id
-  //         firstName
-  //         lastName
-  //         email
-  //         username
-  //       }
-  //     }
-  //   `;
-
   const [updateInfo, { loading }] = useMutation(UPDATE_INFO, {
-    update(_, { data: { user: userData } }) {
-      console.log(userData);
-    },
     variables: {
       firstName: values.firstName,
       lastName: values.lastName,

@@ -79,7 +79,7 @@ export const CHECKOUT = gql`
     $plan: String
     $summary: String
   ) {
-    checkOut(
+    entry: checkOut(
       _id: $id
       productivity: $productivity
       mood: $mood
@@ -97,8 +97,14 @@ export const CHECKOUT = gql`
   }
 `;
 
-// DELETE_ENTRY
-// export const DELETE_ENTRY = gql``;
+// REMOVE_ENTRY
+export const REMOVE_ENTRY = gql`
+  mutation RemoveEntry($id: ID!) {
+    entry: removeEntry(_id: $id) {
+      __typename
+    }
+  }
+`;
 
 // UPDATE_PROFILE
 export const UPDATE_INFO = gql`
